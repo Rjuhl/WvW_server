@@ -128,6 +128,24 @@ router.post('/submitprofile', async (req, res) => {
     res.end()
 })
 
+router.post('/changeStats', async (req, res) => {
+    const filter = {username: req.body.username, password: req.body.password}
+    const userInfo = await schemas.Users.where(filter).findOne()
+    if (userInfo && userInfo.money < 50) {
+        res.status(201).send("Not enough gold to changes player stats")
+        return
+    }
+    if (userInfo) {
+        userInfo.money -= 50
+        const dbRes = await schemas.Users.replaceOne(filter, userInfo);
+        if (!dbRes) {
+            res.status(202).send("Db error");
+        }
+    }
+
+    res.status(200).send("/charcreation")
+});
+
 router.post('/addspell', async (req, res) => {
     const spell = req.body
     let success = true

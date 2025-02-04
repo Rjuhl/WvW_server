@@ -6,6 +6,7 @@ import { IOnlineUsers } from '../resources/interfaces/sockets/IOnlineUsers';
 import { Timer } from './Timer';
 import { randomUUID } from 'crypto';
 import { GameRoom } from './GameRoom';
+import schemas, { IDatabaseSpell } from '../models/schemas'
 
 export default function socketHandler(io: Server): void {
     const rooms: IRooms = {};
@@ -155,16 +156,23 @@ export default function socketHandler(io: Server): void {
                 console.log(`${username} made move in room: ${gameRoom}`);
                 if (turnResponse) {
                     timers[gameRoom].start();
+                    if (turnResponse[0].winner) {
+                        delete rooms[gameRoom];
+                        timers[gameRoom].deleteSelf();
+                        if (turnResponse[0].winner !== "tie") {
+                            const winnerInfo = await schemas.Users.where({username: turnResponse[0].winner}).findOne();
+                            if(winnerInfo) {
+                                winnerInfo.money += 10;
+                                const res = await schemas.Users.replaceOne({username: turnResponse[0].winner}, winnerInfo);
+                            };
+                        };
+                    }
                     for (const playerResponse of turnResponse) {
                         console.log(`Emitting message to ${playerResponse.player} with socketid ${userToSocket[playerResponse.player]}`)
                         io.to(userToSocket[playerResponse.player]).emit('turnResult', playerResponse);
                         if (playerResponse.winner) {
                             io.to(userToSocket[playerResponse.player]).emit('winner', playerResponse.winner);
                         }
-                    }
-                    if (turnResponse[0].winner) {
-                        delete rooms[gameRoom];
-                        timers[gameRoom].deleteSelf();
                     }
                 }
             }
