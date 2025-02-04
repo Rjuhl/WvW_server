@@ -193,6 +193,15 @@ router.get('/spell', async (req, res) => {
     res.end()
 })
 
+router.get('/numSpells', async (req, res) => {
+    const numSpells = await schemas.Spells.countDocuments()
+    if (numSpells) {
+        res.status(200).send({number: numSpells});
+        return;
+    }
+    res.status(500).send("error");
+})
+
 router.get('/test', async (req, res) => {
     const spellFactory = new SpellFactory()
     const spell = await spellFactory.getSpell(1)
