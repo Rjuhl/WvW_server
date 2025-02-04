@@ -168,8 +168,8 @@ export class Game  {
         };
 
         // Take Self Inflicted Damage
-        if (spell1.selfInflictedDamage) this.gameState.player1.playerStats.health -= this.makeRoll(1, 6, 0);
-        if (spell2.selfInflictedDamage) this.gameState.player2.playerStats.health -= this.makeRoll(1, 6, 0);
+        if (spell1.selfInflictedDamage) this.gameState.player1.playerStats.health -= this.makeRoll(1, 10, 0);
+        if (spell2.selfInflictedDamage) this.gameState.player2.playerStats.health -= this.makeRoll(1, 10, 0);
 
         // Gain Mana
         this.gameState.player1.playerStats.mana += this.makeRoll(
@@ -297,8 +297,8 @@ export class Game  {
         this.gameState.player1.playerStats.mana -= player1ManaSpent;
         this.gameState.player2.playerStats.mana -= player2ManaSpent;
 
-        if (player1Spell.reselectSpells && player1ChargeModifier > 0 && player1Turn.newSpells) await this.spellReselect(player1Turn.newSpells, this.gameState.player1);
-        if (player2Spell.reselectSpells && player2ChargeModifier > 0 && player2Turn.newSpells) await this.spellReselect(player2Turn.newSpells, this.gameState.player2);
+        if (player1Spell.reselectSpells && player1Turn.newSpells) await this.spellReselect(player1Turn.newSpells, this.gameState.player1);
+        if (player2Spell.reselectSpells && player2Turn.newSpells) await this.spellReselect(player2Turn.newSpells, this.gameState.player2);
         
         // Unfreeze players
         this.gameState.player1.frozen = false;

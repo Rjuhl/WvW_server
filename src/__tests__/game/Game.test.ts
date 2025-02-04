@@ -339,7 +339,7 @@ describe("Game Test", () => {
             runBasicTests(turnResponse, [
                 58 - SPELL_ROLL.SELF_INFLICTED_DAMAGE, 
                 58 - SPELL_ROLL.SELF_INFLICTED_DAMAGE,
-                17, 17], GameEndTypes.ONGOING);
+                16, 16], GameEndTypes.ONGOING);
         });
 
         it("Negate Block Overflow Reduction Works", async () => {
@@ -413,7 +413,7 @@ describe("Game Test", () => {
             const turnResponse = await game.completeTurn(aTurn, bTurn);
             runBasicTests(turnResponse, [
                 100, 
-                100 - Math.floor(SPELL_ROLL.LIGHTNING_BOLT(2) * 1.4 * 1.5 * 1.25), 
+                100 - Math.floor(SPELL_ROLL.LIGHTNING_BOLT(2) * 1.4 * 1.35 * 1.25), 
                 6, 16], GameEndTypes.ONGOING);
         });
 
@@ -427,7 +427,7 @@ describe("Game Test", () => {
             const turnResponse = await game.completeTurn(aTurn, bTurn);
             runBasicTests(turnResponse, [
                 100, 
-                100 - Math.floor(SPELL_ROLL.WATER_JET(2) * 1.5) - Math.floor(SPELL_ROLL.DRACONIC_BREATH(2) * 1.25), 
+                100 - Math.floor(SPELL_ROLL.WATER_JET(2) * 1.35) - Math.floor(SPELL_ROLL.DRACONIC_BREATH(2) * 1.25), 
                 4, 18], GameEndTypes.ONGOING);
         });
 
