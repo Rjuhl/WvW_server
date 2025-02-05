@@ -132,7 +132,7 @@ router.post('/changeStats', async (req, res) => {
     const filter = {username: req.body.username, password: req.body.password}
     const userInfo = await schemas.Users.where(filter).findOne()
     if (userInfo && userInfo.money < 50) {
-        res.status(201).send("Not enough gold to changes player stats")
+        res.status(201).send("Not enough gold to change player stats")
         return
     }
     if (userInfo) {
