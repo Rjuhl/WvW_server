@@ -504,5 +504,29 @@ describe("Game Test", () => {
                 100 - SPELL_ROLL.WATER_JET(), 
                 9, 7], GameEndTypes.ONGOING);
         });
+
+        it("Test that rune updates work (they now provide buffs to blocks as well)", async () => {
+            const player1State = buildPlayerState(
+                'player_a', 'password',
+                100, 10, 1.0, 0
+            );
+            const player2State = buildPlayerState(
+                'player_b', 'password',
+                100, 10, 1.0, 0
+            );
+            const game = new Game({
+                player1: player1State,
+                player2: player2State
+            });
+            const aTurn = buildPlayerTurn(Spells.WATER_FIELD, 2);
+            const bTurn = buildPlayerTurn(Spells.MAGIC_MISSLE, 4);
+            await game.completeTurn(buildPlayerTurn(Spells.WATER_RUNE, 1), buildPlayerTurn(Spells.WATER_RUNE, 1));
+            const turnResponse = await game.completeTurn(aTurn, bTurn);
+            console.log(Math.floor(SPELL_ROLL.MAGIC_MISSLE(4) - Math.floor(SPELL_ROLL.WATER_FIELD(2) * 1.25) / 2));
+            runBasicTests(turnResponse, [
+                100 - Math.floor((SPELL_ROLL.MAGIC_MISSLE(4) - Math.floor(SPELL_ROLL.WATER_FIELD(2) * 1.25)) / 2), 
+                100, 
+                7, 5], GameEndTypes.ONGOING);            
+        });
     });
 });
