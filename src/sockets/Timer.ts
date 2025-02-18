@@ -70,6 +70,10 @@ export class Timer {
         }
     }
 
+    public updateUserSocket(user: string, socket: string) {
+        (user === this.player1Username) ? this.player1SocketId = socket : this.player2SocketId = socket;
+    }
+
     public start() {
         if (this.intervalId) clearInterval(this.intervalId);
         if (this.countDownIntervalId) clearInterval(this.countDownIntervalId);

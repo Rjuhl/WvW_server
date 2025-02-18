@@ -15,14 +15,14 @@ const router = express.Router();
 router.post('/signup', async (req, res) => {
     const { username, password, accessCode, adminCode } = req.body;
     if (process.env.ACCESS_CODE != accessCode){
-        res.send("Access code is incorrect")
+        res.status(201).send("Access code is incorrect")
         res.end()
         return
     }
 
     const duplicate_username = await schemas.Users.where({username: username}).findOne()
     if (duplicate_username != null) {
-        res.send("Username is taken. Use a different one")
+        res.status(201).send("Username is taken. Use a different one")
         res.end()
         return
     }
@@ -38,7 +38,7 @@ router.post('/signup', async (req, res) => {
     if (saveUser) {
         res.send(`User ${username} created. Please login`)
     } else {
-        res.send("Failed to save user profile. Please try again.")
+        res.status(201).send("Failed to save user profile. Please try again.")
     }
 
     res.end()
