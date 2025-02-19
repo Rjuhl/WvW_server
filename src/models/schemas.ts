@@ -13,6 +13,9 @@ export interface IUser extends Document {
     money: number;
     activeSpells: number[];
     spellsOwned: number[];
+    petsOwned: number[];
+    petsUnlocked: number[];
+    petEquiped: number;
 }
 
 export interface IDatabaseSpell extends Document {
@@ -29,6 +32,13 @@ export interface IDatabaseSpell extends Document {
     description: string;
 }
 
+export interface IPet extends Document {
+    id: number,
+    cost: number,
+    name: string,
+    filePath: string,
+}
+
 // Define the user schema
 const userSchema = new Schema<IUser>({
     admin: { type: Boolean, default: false },
@@ -43,6 +53,9 @@ const userSchema = new Schema<IUser>({
     money: { type: Number, default: 100 },
     activeSpells: { type: [Number], maxItems: 6, uniqueItems: true },
     spellsOwned: { type: [Number], maxItems: 20, uniqueItems: true },
+    petsOwned: { type: [Number], default: [] },
+    petsUnlocked: { type: [Number], default: [0] },
+    petEquiped: { type: Number, default: -1},
 });
 
 // Define the spell schema
@@ -60,10 +73,19 @@ const spellSchema = new Schema<IDatabaseSpell>({
     description: { type: String, required: true },
 });
 
+// Define the pet schema
+const petSchema = new Schema<IPet>({
+    id: { type: Number, required: true },
+    cost: { type: Number, required: true},
+    name: { type: String, required: true },
+    filePath: { type: String, required: true},
+});
+
 // Create models with TypeScript generics
 const Users: Model<IUser> = mongoose.model<IUser>('Users', userSchema, 'users');
 const Spells: Model<IDatabaseSpell> = mongoose.model<IDatabaseSpell>('Spells', spellSchema, 'spells');
+const Pets: Model<IPet> = mongoose.model<IPet>('Pets', petSchema, 'pets');
 
 // Export the models and schemas
-const mySchemas = { Users, Spells };
+const mySchemas = { Users, Spells, Pets };
 export default mySchemas;
