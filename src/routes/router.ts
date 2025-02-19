@@ -8,9 +8,6 @@ import { SpellFactory } from '../factories/SpellFactory';
 dotenv.config();
 
 const router = express.Router();
-// router.get('/users', (req, res) => {})
-// const schemaExample = new schemas.Users({user:xyzm, ...})
-// const saveSchemaExample = await schemaExample.save()
 
 router.post('/signup', async (req, res) => {
     const { username, password, accessCode, adminCode } = req.body;
@@ -76,7 +73,8 @@ router.get('/playerAvatar', async (req, res) => {
             {
                 player: userContext.username,
                 hatColor: userContext.hatColor,
-                staffColor: userContext.staffColor
+                staffColor: userContext.staffColor,
+                petEquiped: userContext.petEquiped,
             }
         )
         return;
@@ -302,5 +300,125 @@ router.post('/deactivateSpell', async (req, res) => {
     res.end()
 
 })
+
+router.post('/addpet', async (req, res) => {
+    const pet = req.body
+    let success = true
+    if (pet.code != process.env.ADMIN_CODE) {
+        console.log("no admin access")
+        res.send("Must be admin to add spell")
+        res.end()
+        return
+    }
+    
+    if (pet.id === '-1') {
+        const numPets = await schemas.Pets.countDocuments()
+        pet.id = numPets
+        const petSchema = new schemas.Pets(pet)
+        const savedPet = await petSchema.save();
+        if (!savedPet) {
+            res.status(500).send("Failed to create spell. Please try again.");
+            res.end()
+            return;
+        }
+    } else {
+        const filter = {id: pet.id}
+        const updateResult = await schemas.Pets.replaceOne(filter, pet);
+        if (!(updateResult.modifiedCount > 0)) {
+            res.status(500).send("Failed to update spell. Please try again.");
+            res.end()
+            return;
+        }
+    }
+
+    if (!success) {
+        res.send("Failed to create spell. Please try again.")
+        res.end()
+        return;
+    }
+    
+    res.send("Success");
+    res.end();
+}) 
+
+
+router.get('/pet', async (req, res) => {
+    const id = req.query.id;
+    const pet =  await schemas.Pets.where({id: id}).findOne();
+    res.send({ pet: pet });
+    res.end();
+});
+
+
+router.get('/numPets', async (req, res) => {
+    const numPets = await schemas.Pets.countDocuments()
+    if (numPets) {
+        res.status(200).send({number: numPets});
+        return;
+    }
+    res.status(500).send("error");
+})
+
+router.post('/equipPet', async (req, res) => {
+    const [username, password, pet] = [req.body.username, req.body.password, req.body.pet];
+    const filter = { username: username, password: password };
+    const userInfo = await schemas.Users.where(filter).findOne();
+
+    if (!userInfo) {
+        res.status(201).send("user does not exist");
+        return;
+    }
+
+    if (!userInfo.petsOwned.includes(pet) && pet !== -1) {
+        res.status(201).send("You do now own that pet");
+        return;
+    }
+
+    userInfo.petEquiped = pet;
+    const dbRes = await schemas.Users.replaceOne(filter, userInfo);
+    if (!dbRes) {
+        res.status(202).send("Db error");
+        return;
+    }
+
+    res.status(200).send(userInfo);
+});
+
+router.post('/buyPet', async (req, res) => {
+    const pet = req.body.pet;
+    const filter = { username: req.body.username, password: req.body.password };
+    const userInfo = await schemas.Users.where(filter).findOne();
+    const petInfo = await schemas.Pets.where({ id: pet }).findOne();
+    if (!userInfo || !petInfo) {
+        res.status(201).send("user or pet does not exist");
+        return;
+    }
+
+    if (userInfo.petsOwned.includes(pet)) {
+        res.status(201).send("Pet already purchased");
+        return;
+    }
+
+    if (userInfo.money < petInfo.cost) {
+        res.status(201).send("Funds are insufficient");
+        return;
+    }
+
+    if (!userInfo.petsUnlocked.includes(pet)) {
+        res.status(201).send("You must unlock this pet before purchasing it");
+        return;
+    }
+
+    userInfo.petsOwned.push(pet);
+    userInfo.money -= petInfo.cost;
+
+    const dbRes = await schemas.Users.replaceOne(filter, userInfo);
+    if (!dbRes) {
+        res.status(202).send("Db error");
+        return;
+    }
+
+    res.status(200).send(userInfo);
+});
 
 export default router;
