@@ -1,4 +1,6 @@
 import { IRooms } from "../resources/interfaces/sockets/IRooms";
+import schemas, { IDatabaseSpell } from '../models/schemas'
+import { StateHandler } from "./StateHandler";
 
 export class Timer {
     private id: string;
@@ -15,6 +17,7 @@ export class Timer {
     private duration: number = 1000 * 60 * 2;
     private currentCount: number;
     private prevLedgerSize = 0;
+    private stateHandler: StateHandler;
 
     constructor(
         id: string, 
@@ -25,6 +28,7 @@ export class Timer {
         player1SocketId: string,
         player2Username: string,
         player2SocketId: string,
+        stateHandler: StateHandler,
         io: any
     ) {
         this.rooms = rooms;
@@ -35,6 +39,7 @@ export class Timer {
         this.player2SocketId = player2SocketId;
         this.io = io;
         this.currentCount = this.duration / 1000;
+        this.stateHandler = stateHandler;
 
         this.id = id;
         this.parent = parent;
@@ -53,20 +58,25 @@ export class Timer {
         this.io.to(this.player2SocketId).volatile.emit("clock", this.currentCount);
     }
 
-    private executeTask() {
+    private async executeTask() {
         if (!this.rooms[this.roomName] || this.rooms[this.roomName].gameOver()) {
             this.deleteSelf();
+            return;
         }
         if (this.prevLedgerSize <= this.rooms[this.roomName].getLedger().length) {
             const winner = this.rooms[this.roomName].getTimeOutWinner();
             this.io.to(this.player1SocketId).emit("winner", winner);
             this.io.to(this.player2SocketId).emit("winner", winner);
-
-            // In future award gold for timeout win
-            console.log(`${this.player1Username} or ${this.player2Username} should have won gold`);
-
-            delete this.rooms[this.roomName];
+            
+            const winnerInfo = await schemas.Users.where({username: winner}).findOne();
+                if(winnerInfo) {
+                    winnerInfo.money += 10;
+                    const res = await schemas.Users.replaceOne({username: winner}, winnerInfo);
+                };
+            
+            this.stateHandler.gameOver(this.roomName);
             this.deleteSelf();
+            return;
         }
     }
 
