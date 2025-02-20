@@ -79,9 +79,6 @@ export default function socketHandler(io: Server): void {
                     for (const playerResponse of turnResponse) {
                         const playerSocket = stateHandler.getUserSocket(playerResponse.player);
                         io.to(playerSocket).emit('turnResult', playerResponse);
-                        if (playerResponse.winner) {
-                            io.to(playerSocket).emit('winner', playerResponse.winner);
-                        }
                     }
                 }
             }
