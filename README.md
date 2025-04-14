@@ -80,25 +80,27 @@ Once purchased, equip spells on the **Equip** page.
 
 ## 📜 Interpreting a Spell
 
+<p align="center">
+     <img src="assets/WvWSpellDiagram.png" alt="Motion Normalization" width="400">
+</p>
+
 Each spell includes:
 
-- **Name, Class, Type**
-- **Mana Cost**
-- **Gold Cost**
-- **Chargeable?**
-- **Description**
-- **Base Dice Formula**
+- **1. Name:** The name of the spell.
+- **2. Spell Class:** Fire, Water, Electric, All, or None.
+- **3. Spell Type:**  Attack, Block, Healing, Recharge, Passive, None, or All.
+  - **Attack:** Deals damage to the opponent.
+  - **Block:** Prevents incoming damage.
+  - **Recharge:** Restores the caster’s mana.
+  - **Healing:** Restores the caster’s health.
+  - **Passive** Provides various effects, often granting beneficial modifiers to future spells.
+- **4. Mana Cost** The minimum amount of mana required to cast the spell.
+- **5. Spell Description & Additional Effects:** A brief explanation of the spell’s effects. For example, the spell above deals **direct damage** and also applies the ignite status effect for three turns, which causes the opponent to take **1d10 damage at the start of their turn**.
+- **6. Gold Cost** The amount of gold required to purchase the spell.
+- **7. Base Dice Formula** The spell’s base effect when cast for its minimum mana cost.
 
 > Example Charging Formula:  
 > For a base spell `3 + 1d6`, casting it with 2 mana becomes `6 + 2d6`.
-
-Spell roles include:
-
-- **Attack** – Damage opponent  
-- **Block** – Prevent damage  
-- **Recharge** – Gain mana  
-- **Healing** – Regain health  
-- **Passive** – Apply buffs/modifiers
 
 ---
 
