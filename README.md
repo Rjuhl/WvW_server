@@ -15,19 +15,19 @@ Winning requires understanding your opponent’s strategy, managing resources wi
 
 ## 🧾 Table of Contents
 
-- [Creating an Account](#creating-an-account)
-- [Character Creation](#character-creation)
-- [Buying Spells](#buying-spells)
-- [Equipping Spells](#equipping-spells)
-- [Interpreting a Spell](#interpreting-a-spell)
-- [Game Turn Walkthrough](#game-turn-walkthrough)
-- [Spell List](#spell-list)
-  - [Attack Spells](#attack-spells)
-  - [Block Spells](#block-spells)
-  - [Recharge Spells](#recharge-spells)
-  - [Heal Spells](#heal-spells)
-  - [Passive Spells](#passive-spells)
-- [Balance Changes & Fixes](#balance-changes--fixes)
+- [Creating an Account](#-creating-an-account)
+- [Character Creation](#-character-creation)
+- [Buying Spells](#-buying-spells)
+- [Equipping Spells](#-equipping-spells)
+- [Interpreting a Spell](#-interpreting-a-spell)
+- [Game Turn Walkthrough](#-game-turn-walkthrough)
+- [Spell List](#-spell-list)
+  - [Attack Spells](#-attack-spells)
+  - [Block Spells](#-block-spells)
+  - [Recharge Spells](#-recharge-spells)
+  - [Heal Spells](#-heal-spells)
+  - [Passive Spells](#-passive-spells)
+- [Balance Changes & Fixes](#-balance-changes--fixes)
 
 ---
 
