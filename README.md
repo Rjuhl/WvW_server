@@ -22,12 +22,12 @@ Winning requires understanding your opponent’s strategy, managing resources wi
 - [Interpreting a Spell](#-interpreting-a-spell)
 - [Game Turn Walkthrough](#-game-turn-walkthrough)
 - [Spell List](#-spell-list)
-  - [Attack Spells](#-attack-spells)
-  - [Block Spells](#-block-spells)
+  - [Attack Spells](#%EF%B8%8F-attack-spells)
+  - [Block Spells](#%EF%B8%8F-block-spells)
   - [Recharge Spells](#-recharge-spells)
   - [Heal Spells](#-heal-spells)
   - [Passive Spells](#-passive-spells)
-- [Balance Changes & Fixes](#-balance-changes--fixes)
+- [Balance Changes & Fixes](#%EF%B8%8F-balance-changes--fixes)
 
 ---
 
